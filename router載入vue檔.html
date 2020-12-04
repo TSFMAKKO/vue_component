@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <p>router載入vue檔.html</p>
+    <div id="app">
+      <!-- <my-component></my-component> -->
+      <router-view></router-view>
+    </div>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+    <!-- <script src="https://unpkg.com/vue"></script> -->
+    <script src="https://unpkg.com/http-vue-loader"></script>
+    <script>
+      // console.log(VueRouter);
+      let home = {
+        template: `<div>Home</div>`,
+      };
+
+      let about = httpVueLoader("./about.vue");
+      console.log(about);
+
+      let routes = [
+        { path: "/home", component: home },
+        { path: "/about", component: about },
+      ];
+
+      let router = new VueRouter({
+        routes,
+      });
+
+      new Vue({
+        el: "#app",
+        components: {
+          //   "my-component": httpVueLoader("my-component.vue"),
+        },
+        router,
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>載入vue檔</title>
+  </head>
+  <body>
+    <div id="my-app">
+      <my-component></my-component>
+
+      <!-- 要在new Vue的環境才能執行 -->
+      <!-- <my-component2></my-component2> -->
+
+      <!--  -->
+      <!-- <my-component3></my-component3> -->
+    </div>
+
+    <script src="https://unpkg.com/vue"></script>
+    <script src="https://unpkg.com/http-vue-loader"></script>
+    <script>
+      // let component2;
+    //   let template2 = `<template>
+    //         <div class="hello">Hello2 {{who}}</div>
+    //         </template>`;
+
+    //   Vue.component("my-component2", {
+    //     data: function () {
+    //       return {
+    //         who: "world",
+    //       };
+    //     },
+    //     template: template2,
+    //   });
+
+      new Vue({
+        el: "#my-app",
+        components: {
+          "my-component": httpVueLoader("component1.vue"),
+      });
+    </script>
+  </body>
+</html>

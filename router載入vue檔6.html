@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>router載入vue檔.html</title>
+  </head>
+  <body>
+    <p>router載入vue檔.html</p>
+    <div id="app">
+      <!-- <my-component></my-component> -->
+
+      <!-- 模板資料 -->
+      <router-view
+        :title="title"
+        @update="update"
+        @err_timer="err_timer"
+        :timer1="timer1"
+      ></router-view>
+      <!-- 模板資料 -->
+    </div>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+    <!-- <script src="https://unpkg.com/vue"></script> -->
+    <script src="https://unpkg.com/http-vue-loader"></script>
+    <script>
+      // console.log(VueRouter);
+
+      //   let err_timer;
+
+      let index = {
+        template: `<div>index</div>`,
+      };
+
+      let about_1 = {
+        template: `<div>/about/空路由</div>`,
+      };
+
+      let about_2 = {
+        template: `<div>/about_2</div>`,
+      };
+
+      //   beforeCreate / created
+      //   watch:{ $route(to, from){} }
+
+      let any_path = httpVueLoader("./any_path.vue");
+      //   let err = {
+      //     template: `<div>e04找不到網頁</div>`,
+      //     beforeCreate() {
+      //       clearTimeout(err_timer);
+      //       console.log("beforeCreate");
+      //       err_timer = setTimeout(() => {
+      //         // history.pushState('','','/');
+      //         this.$router.push("/");
+      //       }, 3000);
+      //     },
+      //   };
+
+      let about = httpVueLoader("./about2.vue");
+      console.log(about);
+
+      let routes = [
+        { path: "/", component: index },
+        { path: "/home", component: httpVueLoader("./home.vue") },
+        {
+          path: "/about",
+          component: about,
+          children: [
+            { path: "", component: about_1 },
+            { path: "2", component: about_2 },
+            { path: "*", component: any_path },
+          ],
+        },
+        //  redirect: "/"
+        { path: "*", component: httpVueLoader("./err.vue") },
+      ];
+
+      let router = new VueRouter({
+        routes,
+      });
+
+      let vm = new Vue({
+        el: "#app",
+        data: {
+          title: "父層data_title",
+          update2: "",
+          timer1: "",
+        },
+        methods: {
+          update(inputVal) {
+            console.log("inputVal:", inputVal);
+          },
+          err_timer(time) {
+            console.log("err_timer函數", time);
+            this.timer = time;
+            console.log(this.timer);
+          },
+        },
+        components: {
+          //   "my-component": httpVueLoader("my-component.vue"),
+        },
+        router,
+      });
+    </script>
+  </body>
+</html>

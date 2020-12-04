@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>載入vue檔</title>
+  </head>
+  <body>
+    <div id="my-app">
+      <component2></component2>
+    </div>
+
+    <script src="https://unpkg.com/vue"></script>
+    <script src="https://unpkg.com/http-vue-loader"></script>
+    <!-- <script src="https://unpkg.com/httpVueLoaderRegister.js"></script> -->
+    <script>
+      // console.log(Vue);
+      //   console.log(httpVueLoader);
+      //   console.log(httpVueLoader.register);
+      //   httpVueLoader.register(Vue, "component2.vue");
+
+      // Vue.use(httpVueLoader);
+
+      //   new Vue({
+      //     el: "#my-app",
+      //     components: ['url:component2.vue'],
+
+      //   });
+
+      httpVueLoader.httpRequest = function (url) {
+        // 返回 axios.get(url)
+        return axiox
+          .get(url)
+          .then(function (res) {
+            return res.data;
+          })
+          .catch(function (err) {
+            return Promse.reject(err.status);
+          });
+      };
+    </script>
+  </body>
+</html>
