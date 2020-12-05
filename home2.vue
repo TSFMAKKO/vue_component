@@ -1,5 +1,7 @@
 <template>
+  <!-- <transition name="fade"> -->
   <div class="hello">home {{ who }} [{{ title }}]</div>
+  <!-- </transition> -->
 </template>
 
 <script>
@@ -40,4 +42,5 @@ module.exports = {
 .hello {
   background-color: green;
 }
+
 </style>

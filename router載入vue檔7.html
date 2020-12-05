@@ -11,12 +11,19 @@
         padding: 0;
         list-style: none;
       }
-      
     </style>
   </head>
   <body>
     <p>router載入vue檔.html</p>
     <div id="app">
+      <!-- <router-link :to="/">index</router-link> -->
+      <router-link :to="{name:'about', params:{id:'1'}}">about</router-link>
+      <router-link :to="{path:'/about/'}">about/空</router-link>
+      <router-link :to="{path:'/about/2'}">about/2</router-link>
+      <router-link :to="{path:'/about/315151'}">about/315151</router-link>
+      <router-link :to="{path:'/about/315151', query:{a:123}}"
+        >about/?a=123</router-link
+      >
       <!-- <my-component></my-component> -->
 
       <!-- 模板資料 -->
@@ -70,10 +77,14 @@
 
       let routes = [
         { path: "/", component: index },
-        { path: "/home", component: httpVueLoader("./home.vue") },
+        { path: "/home", name: "home", component: httpVueLoader("./home.vue") },
         {
           path: "/about",
           component: about,
+          //   給組件名稱 可以直接跳過來+參數(params)/非query
+          //   方便params不用再用字串組合
+
+          name: "about",
           children: [
             { path: "", component: about_1 },
             { path: "2", component: about_2 },

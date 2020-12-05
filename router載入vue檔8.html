@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>router載入vue檔.html</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .fade-enter-active {
+        /* 進入時的動畫 */
+        transition: opacity 0.5s;
+      }
+
+      .fade-leave-active {
+        /* 離開時沒有 */
+        transition: opacity 0.5s;
+      }
+
+      .fade-enter {
+        opacity: 0;
+      }
+
+      .fade-leave-to {
+        opacity: 0;
+      }
+
+      /* 自訂淡入淡出 */
+      .fade2-enter-active {
+        /* 進入時的動畫 */
+        animation: fade2 0.5s 1;
+      }
+
+      .fade2-leave-active {
+        /* 離開時沒有 */
+        animation: fade2 0.5s 1 reverse;
+      }
+
+      @keyframes fade2 {
+          0%{
+              opacity: 0;
+          }
+          100%{
+              opacity: 1;
+          }
+      }
+
+      /*  */
+      .bounce-enter-active {
+        animation: bounce-in 0.5s;
+      }
+
+      .bounce-leave-active {
+        animation: bounce-in 0.5s reverse;
+      }
+
+      @keyframes bounce-in {
+        0% {
+          transform: scale(0);
+        }
+        50% {
+          transform: scale(1.5);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      .bounce-enter-active {
+        /* 沒寫infiniti 預設就是一次 */
+        animation: bounce-in 0.5s;
+      }
+      .bounce-leave-active {
+        /* 直接反轉就好 */
+        animation: bounce-in 0.5s reverse;
+      }
+      @keyframes bounce-in {
+        0% {
+          transform: scale(0);
+        }
+        50% {
+          transform: scale(1.5);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      /* 被點到會有兩個 */
+      /* router-link-exact-active(精確) router-link-active */
+      /* 相關的父層會有一個 */
+      /* router-link-active */
+    </style>
+  </head>
+  <body>
+    <p>router載入vue檔.html</p>
+    <div id="app">
+      <!-- <router-link :to="/">index</router-link> -->
+      <router-link :to="{path:'/home/'}">home</router-link>
+      <router-link :to="{name:'about', params:{id:'1'}}">about</router-link>
+      <router-link :to="{path:'/about/'}">about/空</router-link>
+      <router-link :to="{path:'/about/2'}">about/2</router-link>
+      <router-link :to="{path:'/about/315151'}">about/315151</router-link>
+      <router-link :to="{path:'/about/315151', query:{a:123}}"
+        >about/?a=123</router-link
+      >
+      <!-- <my-component></my-component> -->
+
+      <!-- 模板資料 -->
+      <transition name="fade" mode="out-in">
+        <router-view
+          :title="title"
+          @update="update"
+          @err_timer="err_timer"
+          :timer1="timer1"
+        ></router-view>
+      </transition>
+
+      <!-- 模板資料 -->
+    </div>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+    <!-- <script src="https://unpkg.com/vue"></script> -->
+    <script src="https://unpkg.com/http-vue-loader"></script>
+    <script>
+      // console.log(VueRouter);
+
+      //   let err_timer;
+
+      let index = {
+        template: `<div>index</div>`,
+      };
+
+      let about_1 = {
+        template: `<div>/about/空路由</div>`,
+      };
+
+      let about_2 = {
+        template: `<div>/about_2</div>`,
+      };
+
+      //   beforeCreate / created
+      //   watch:{ $route(to, from){} }
+
+      let any_path = httpVueLoader("./any_path.vue");
+      //   let err = {
+      //     template: `<div>e04找不到網頁</div>`,
+      //     beforeCreate() {
+      //       clearTimeout(err_timer);
+      //       console.log("beforeCreate");
+      //       err_timer = setTimeout(() => {
+      //         // history.pushState('','','/');
+      //         this.$router.push("/");
+      //       }, 3000);
+      //     },
+      //   };
+
+      let about = httpVueLoader("./about2.vue");
+      console.log(about);
+
+      let routes = [
+        { path: "/", component: index },
+        {
+          path: "/home",
+          name: "home",
+          component: httpVueLoader("./home2.vue"),
+        },
+        {
+          path: "/about",
+          component: about,
+          //   給組件名稱 可以直接跳過來+參數(params)/非query
+          //   方便params不用再用字串組合
+
+          name: "about",
+          children: [
+            { path: "", component: about_1 },
+            { path: "2", component: about_2 },
+            { path: "*", component: any_path },
+          ],
+        },
+        //  redirect "/"
+        { path: "*", component: httpVueLoader("./err.vue") },
+      ];
+
+      let router = new VueRouter({
+        routes,
+      });
+
+      let vm = new Vue({
+        el: "#app",
+        data: {
+          title: "父層data_title",
+          update2: "",
+          timer1: "",
+        },
+        methods: {
+          update(inputVal) {
+            console.log("inputVal:", inputVal);
+          },
+          err_timer(time) {
+            console.log("err_timer函數", time);
+            this.timer = time;
+            console.log(this.timer);
+          },
+        },
+        components: {
+          //   "my-component": httpVueLoader("my-component.vue"),
+        },
+        router,
+      });
+    </script>
+  </body>
+</html>

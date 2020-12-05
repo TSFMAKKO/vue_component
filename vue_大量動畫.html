@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <style>
+        /*  插入時 fade-enter-active && v-enter-to */
+        /* 離開時 fade-leave-active && v-leave-to */
+        /* router-link-exact(精確)-active router-link-active */
+      .fade-enter-active,
+      .fade-leave-active {
+        transition: all 0.5s ease;
+      }
+
+      .fade-enter {
+        transform: translateX(50px);
+        opacity: 0;
+      }
+
+      .fade-leave-to {
+        transform: translateX(-50px);
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="vm">
+      <!-- 預設產生span tag -->
+      <!-- 可以指定tag="div" -->
+      <transition-group name="fade" tag="div">
+        <!-- v-for迴圈記得指定key -->
+        <span v-for="n in numbers" :key="n">{{ n }} </span>
+      </transition-group>
+    </div>
+
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+    <!-- <script src="https://unpkg.com/vue"></script> -->
+    <script src="https://unpkg.com/http-vue-loader"></script>
+    <script>
+      new Vue({
+        el: "#vm",
+        data: {
+          numbers: [1, 2, 3, 4, 5],
+          next: 6,
+          flow: 1,
+        },
+        methods: {
+          randomIndex: function () {
+            return Math.floor(Math.random() * this.numbers.length);
+          },
+          insert: function () {
+            var r = this.randomIndex();
+            this.numbers.splice(r, 0, this.next++);
+            console.log("this next:", this.next);
+          },
+          remove: function () {
+            var r = this.randomIndex();
+            // 在array某index 移除一個數值
+            this.numbers.splice(r, 1);
+            this.next--;
+            console.log("next:", this.next);
+          },
+          timer: function () {
+            var len = this.numbers.length;
+            //
+            if (len >= 9) {
+              // flow流向負數 代表減少
+              this.flow = -1;
+            } else if (len <= 1) {
+              // flow流向正數 代表增加
+              this.flow = 1;
+            }
+
+            //
+            if (this.flow > 0) {
+              // 增加
+              this.insert();
+            } else {
+              // 減少
+              this.remove();
+            }
+          },
+        },
+        // 掛在後執行 mounted(){}
+        // beforeCreate(){} created(){}
+        mounted: function () {
+          setInterval(this.timer, 1000);
+        },
+      });
+    </script>
+  </body>
+</html>

@@ -8,9 +8,10 @@
     </form>
 
     <!-- 要放在template第一個div內 -->
-    <router-view></router-view>
+    <transition name="fade" mode="out-in">
+      <router-view></router-view>
+    </transition>
   </div>
-  
 </template>
 
 <script>
